@@ -1,0 +1,53 @@
+name: Build and deploy RailDate
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Get Pages URL
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Build actual domain and metadata
+        run: python3 scripts/build.py
+        env:
+          DEPLOYMENT_BUILD: 'true'
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+          CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
+          GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
+          ADSENSE_PUBLISHER_ID: ${{ vars.ADSENSE_PUBLISHER_ID }}
+          ADSENSE_SLOT_ID: ${{ vars.ADSENSE_SLOT_ID }}
+          ADS_ENABLED: ${{ vars.ADS_ENABLED }}
+          ADS_PRIVACY_READY: ${{ vars.ADS_PRIVACY_READY }}
+      - name: Check calculations and site
+        run: npm test
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v4
