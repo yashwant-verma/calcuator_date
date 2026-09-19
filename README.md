@@ -13,13 +13,13 @@ An independent Hindi/English train booking date calculator. No API, database, pa
 - GitHub Actions build, calculation checks and Pages deployment workflow.
 - Optional AdSense verification/ads.txt and one separated in-content ad unit. Advertising disabled by default.
 
-## Deploy to your GitHub
+## Free deployment
 
-1. Source repository: `yashwant-verma/calcuator_date`.
-2. Upload this project's contents to its root, including `.github/workflows/deploy.yml` and `.gitignore`. The connector can publish files once a target repository exists; if a tool cannot write workflow files, upload the workflow through GitHub's own UI.
-3. In repository **Settings → Pages → Build and deployment → Source**, select **GitHub Actions**. The connected integration used to prepare this project does not expose repository creation or Pages configuration.
-4. Run **Actions → Build and deploy RailDate → Run workflow** (or push to main after enabling Pages).
-5. Use the successful deployment's URL. The workflow derives `SITE_URL` from GitHub Pages; it does not assume a hostname or claim a URL is live before deployment succeeds.
+Source repository: `yashwant-verma/calcuator_date`. The repository is public, GitHub Pages uses the GitHub Actions publishing source, and HTTPS is enforced. The workflow builds with the actual Pages URL and publishes on pushes to `main`.
+
+This setup uses GitHub Free Pages and standard `ubuntu-latest` runners in the public repository. No paid plan, purchased domain, paid API, larger runner, database or billing upgrade is used. The free `github.io` address is the intended public address. GitHub's service limits still apply.
+
+To redeploy manually, use **Actions → Build and deploy RailDate → Run workflow**. Wait for the build and deploy jobs to succeed before claiming an update is live.
 
 GitHub Pages usage limits: https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits . The site is a free informational utility; it has no checkout or paid SaaS. Before expanding it into an online business or paid service, use hosting that permits that use. GitHub can remain the source repository.
 
@@ -59,7 +59,7 @@ AdSense approval is a separate Google review. Do not enable ads with fake IDs. R
 
 Official consent setup reference: https://support.google.com/adsense/answer/16918505?hl=en . Official ads.txt location reference: https://support.google.com/adsense/answer/9785052?hl=en .
 
-Use a custom domain you control for the public earning site. `ads.txt` must be discoverable at the relevant domain root; on a GitHub project URL the generated `/raildate/ads.txt` is **not** the host-root `/ads.txt`. Resolve that at the host root or use a custom domain before monetization. The generated sitemap can be submitted at its exact URL even when a project-scoped robots.txt is not the host root. Configure a custom domain in Pages settings, update DNS at your registrar, enforce HTTPS, and rerun the workflow to regenerate canonical/hreflang/sitemap URLs.
+The free GitHub Pages address is sufficient for deployment; no domain purchase is part of this project. AdSense must independently accept and approve the submitted site. `ads.txt` belongs at the relevant host root: the generated `/calcuator_date/ads.txt` is not `/ads.txt` at the host root. Resolve that root-file requirement with a free root-site configuration if needed before monetization. No separate root repository has been created. The generated sitemap can be submitted at its exact project URL. Do not buy a domain or hosting plan unless the owner separately requests it.
 
 The site sends no analytics events. Add analytics only after deciding the product and updating the policy to match real behaviour. Never click your own ads, buy invalid traffic or promise guaranteed rankings. Publishing does not automatically verify Search Console or submit a sitemap.
 
