@@ -44,7 +44,9 @@ Replace the example with the actual public URL. Project subpaths are supported. 
 
 ## AdSense and Search Console setup
 
-No AdSense or Google account was connected in this session. There is no approval, publisher ID, Search Console verification or revenue claim.
+The owner created an AdSense account and supplied publisher ID `ca-pub-1127445765148847`. The deployment workflow now defaults to this public ID, so the generated calculator and guide pages contain the ownership-verification meta tag while ad scripts remain off. The root homepage at https://yashwant-verma.github.io/ also contains the tag, and https://yashwant-verma.github.io/ads.txt serves the matching authorization record. Source for the root homepage: `yashwant-verma/yashwant-verma.github.io`.
+
+The owner should select **Meta tag** in AdSense and click Verify after checking the live page. Publishing these files is not Google verification or site approval. Account/payment information, site review, ad-unit configuration and required consent setup are still separate steps. Search Console verification and revenue are not claimed.
 
 Set these **repository variables** in Settings → Secrets and variables → Actions → Variables, then rebuild:
 
@@ -61,7 +63,7 @@ AdSense approval is a separate Google review. Do not enable ads with fake IDs. R
 
 Official consent setup reference: https://support.google.com/adsense/answer/16918505?hl=en . Official ads.txt location reference: https://support.google.com/adsense/answer/9785052?hl=en .
 
-The free GitHub Pages address is sufficient for deployment; no domain purchase is part of this project. AdSense must independently accept and approve the submitted site. `ads.txt` belongs at the relevant host root: the generated `/train-booking-date-calculator/ads.txt` is not `/ads.txt` at the host root. Resolve that root-file requirement with a free root-site configuration if needed before monetization. No separate root repository has been created. The generated sitemap can be submitted at its exact project URL. Do not buy a domain or hosting plan unless the owner separately requests it.
+The free GitHub Pages address is used; no domain purchase is part of this project. AdSense must independently approve the submitted site `yashwant-verma.github.io`. The authoritative host-root `ads.txt` is maintained in `yashwant-verma/yashwant-verma.github.io`; the project-path copy alone is not sufficient for the host-root location. If the publisher ID changes, update both repositories. The root `robots.txt` advertises a sitemap index covering the homepage and this project's sitemap. Do not buy a domain or hosting plan unless the owner separately requests it.
 
 The site sends no analytics events. Add analytics only after deciding the product and updating the policy to match real behaviour. Never click your own ads, buy invalid traffic or promise guaranteed rankings. Publishing does not automatically verify Search Console or submit a sitemap.
 
