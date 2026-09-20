@@ -15,7 +15,9 @@ An independent Hindi/English train booking date calculator. No API, database, pa
 
 ## Free deployment
 
-Source repository: `yashwant-verma/calcuator_date`. The repository is public, GitHub Pages uses the GitHub Actions publishing source, and HTTPS is enforced. The workflow builds with the actual Pages URL and publishes on pushes to `main`.
+Source repository: `yashwant-verma/train-booking-date-calculator`. The repository is public, GitHub Pages uses the GitHub Actions publishing source, and HTTPS is enforced. The workflow builds with the actual Pages URL and publishes on pushes to `main`.
+
+Website: https://yashwant-verma.github.io/train-booking-date-calculator/ . Brand: **RailDate — Train Booking Date Calculator**. The descriptive project path is part of the free `github.io` address, not a purchased custom domain.
 
 This setup uses GitHub Free Pages and standard `ubuntu-latest` runners in the public repository. No paid plan, purchased domain, paid API, larger runner, database or billing upgrade is used. The free `github.io` address is the intended public address. GitHub's service limits still apply.
 
@@ -59,7 +61,7 @@ AdSense approval is a separate Google review. Do not enable ads with fake IDs. R
 
 Official consent setup reference: https://support.google.com/adsense/answer/16918505?hl=en . Official ads.txt location reference: https://support.google.com/adsense/answer/9785052?hl=en .
 
-The free GitHub Pages address is sufficient for deployment; no domain purchase is part of this project. AdSense must independently accept and approve the submitted site. `ads.txt` belongs at the relevant host root: the generated `/calcuator_date/ads.txt` is not `/ads.txt` at the host root. Resolve that root-file requirement with a free root-site configuration if needed before monetization. No separate root repository has been created. The generated sitemap can be submitted at its exact project URL. Do not buy a domain or hosting plan unless the owner separately requests it.
+The free GitHub Pages address is sufficient for deployment; no domain purchase is part of this project. AdSense must independently accept and approve the submitted site. `ads.txt` belongs at the relevant host root: the generated `/train-booking-date-calculator/ads.txt` is not `/ads.txt` at the host root. Resolve that root-file requirement with a free root-site configuration if needed before monetization. No separate root repository has been created. The generated sitemap can be submitted at its exact project URL. Do not buy a domain or hosting plan unless the owner separately requests it.
 
 The site sends no analytics events. Add analytics only after deciding the product and updating the policy to match real behaviour. Never click your own ads, buy invalid traffic or promise guaranteed rankings. Publishing does not automatically verify Search Console or submit a sitemap.
 
@@ -72,4 +74,4 @@ Railway rules reviewed on 13 September 2026. Update the rule logic, guides and r
 - https://www.pmf.irctc.co.in/cn/TermsAndConditions.html
 - https://www.pib.gov.in/PressReleasePage.aspx?PRID=2135694
 
-Edit copy in `scripts/content.py` and `scripts/build.py`; appearance in `src/style.css`; behaviour in `src/app.mjs`; calendar arithmetic in `src/dates.mjs`. Rebuild after every change. Tests cover date boundaries, leap years, day-2 boarding, opening instants and exported event formatting. `scripts/check.py` checks generated internal links, anchors, languages, labels, metadata and JSON-LD. Browser visual/E2E QA and live deployment checks have not been performed in this session.
+Edit copy in `scripts/content.py` and `scripts/build.py`; appearance in `src/style.css`; behaviour in `src/app.mjs`; calendar arithmetic in `src/dates.mjs`. Rebuild after every change. Tests cover date boundaries, leap years, day-2 boarding, opening instants and exported event formatting. `scripts/check.py` checks generated internal links, anchors, languages, labels, metadata and JSON-LD. Check the live deployment after changing the repository name, base path or metadata.
