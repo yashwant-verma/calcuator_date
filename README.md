@@ -1,6 +1,6 @@
 # RailDate
 
-An independent Hindi/English train booking date calculator. No API, database, paid dependency or IRCTC credentials are needed. **Deployment is configured through GitHub Actions. Ads are off until your AdSense setup is complete.**
+An independent Hindi/English train booking date calculator. No API, database, paid dependency or IRCTC credentials are needed. **Deployment is configured through GitHub Actions. Auto ads code is installed; Google site approval is still pending.**
 
 ## Included
 
@@ -11,7 +11,7 @@ An independent Hindi/English train booking date calculator. No API, database, pa
 - Responsive layout, labelled form controls, keyboard focus, reduced-motion support, unique titles/descriptions, canonical and language-alternate URLs, sitemap, robots.txt, custom favicon and truthful structured data.
 - Feature-detected WebMCP calculator action. Its runtime validation was unavailable; no dependency on it for the normal UI.
 - GitHub Actions build, calculation checks and Pages deployment workflow.
-- Optional AdSense verification/ads.txt and one separated in-content ad unit. Advertising disabled by default.
+- AdSense verification, root ads.txt, Auto ads integration and consent preference controls. Optional manual display units remain disabled.
 
 ## Free deployment
 
@@ -44,9 +44,15 @@ Replace the example with the actual public URL. Project subpaths are supported. 
 
 ## AdSense and Search Console setup
 
-The owner created an AdSense account and supplied publisher ID `ca-pub-1127445765148847`. The deployment workflow now defaults to this public ID, so the generated calculator and guide pages contain the ownership-verification meta tag while ad scripts remain off. The root homepage at https://yashwant-verma.github.io/ also contains the tag, and https://yashwant-verma.github.io/ads.txt serves the matching authorization record. Source for the root homepage: `yashwant-verma/yashwant-verma.github.io`.
+On 21 September 2026 the authenticated AdSense dashboard confirmed:
+- Site ownership verified; review requested; site status **Getting ready** (not approved).
+- Payments information received and Auto ads already On.
+- Google European regulations consent message Published, including Do not consent.
+- Corrected that message's privacy URL to the HTTPS calculator Privacy page and set the displayed site name to RailDate; republished successfully.
 
-The owner should select **Meta tag** in AdSense and click Verify after checking the live page. Publishing these files is not Google verification or site approval. Account/payment information, site review, ad-unit configuration and required consent setup are still separate steps. Search Console verification and revenue are not claimed.
+The Auto ads tag for `ca-pub-1127445765148847` is installed on the root homepage and generated indexable pages. AdSense loads the published Google CMP through this tag. Footer privacy controls use the documented googlefc callback queue to reopen the consent message when available. No fake slot ID, custom CMP or private login email is used. Auto ads needs no individual ad slot. The legacy manual-unit path still requires its original safeguards.
+
+The deployment defaults `AUTO_ADS_ENABLED` and `ADS_PRIVACY_READY` to true based on the observed published CMP. Installing the tag is allowed during review; it does not constitute approval or guarantee impressions. To disable this integration, set `AUTO_ADS_ENABLED=false` and leave `ADS_ENABLED` unset/false, rebuild, and remove the tag from the separate root homepage as well. Root authoritative ads.txt: https://yashwant-verma.github.io/ads.txt . Search Console verification is separate and is not claimed complete.
 
 Set these **repository variables** in Settings → Secrets and variables → Actions → Variables, then rebuild:
 
@@ -56,8 +62,9 @@ Set these **repository variables** in Settings → Secrets and variables → Act
 | `GOOGLE_SITE_VERIFICATION` | The exact Search Console HTML-tag verification content value. |
 | `ADSENSE_PUBLISHER_ID` | Real `ca-pub-` ID with 16 digits, from your AdSense account. Adds verification metadata and ads.txt, even while ads are off. |
 | `ADSENSE_SLOT_ID` | Your responsive display-ad unit's numeric slot ID. |
-| `ADS_ENABLED` | Set to `true` only after approval, the required account steps and privacy configuration. |
-| `ADS_PRIVACY_READY` | Set to `true` after configuring the required consent messages in AdSense Privacy & messaging and reviewing the site's privacy policy. This is an operator attestation, not a consent implementation or Google certification. |
+| `AUTO_ADS_ENABLED` | Install the Auto ads tag; production defaults to true. Google approval still controls serving. |
+| `ADS_ENABLED` | Optional manual display units. Keep off when using Auto ads alone. Requires slot, contact and consent configuration. |
+| `ADS_PRIVACY_READY` | Production defaults to `true` after the published Google consent message was verified on 2026-09-21. Revisit when changing providers or consent settings. This is an operator attestation, not a consent implementation or Google certification. |
 
 AdSense approval is a separate Google review. Do not enable ads with fake IDs. Review eligibility and policies: https://support.google.com/adsense/answer/9724 . For users in regions requiring a Google-certified CMP, configure an eligible solution such as the applicable Google Privacy & messaging flow before enabling ads. No custom substitute consent banner is included.
 

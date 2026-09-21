@@ -22,13 +22,17 @@ VERIFY=os.environ.get('GOOGLE_SITE_VERIFICATION','')
 if PUBLISHER and not re.fullmatch(r'ca-pub-\d{16}',PUBLISHER):
     raise SystemExit('ADSENSE_PUBLISHER_ID must be a real ca-pub ID with 16 digits')
 ADS=os.environ.get('ADS_ENABLED','false')=='true'
+AUTO_ADS=os.environ.get('AUTO_ADS_ENABLED','false')=='true'
+AD_TAG=ADS or AUTO_ADS
+if AD_TAG and (not PUBLISHER or os.environ.get('ADS_PRIVACY_READY')!='true'):
+    raise SystemExit('AdSense integration requires a publisher ID and a verified, published consent setup (ADS_PRIVACY_READY=true).')
 SLOT=os.environ.get('ADSENSE_SLOT_ID','')
 if ADS and (not PUBLISHER or not re.fullmatch(r'\d+',SLOT) or os.environ.get('ADS_PRIVACY_READY')!='true' or not CONTACT):
     raise SystemExit('Live ads require publisher and slot IDs, a contact email, and ADS_PRIVACY_READY=true after configuring required consent in AdSense.')
 for old in OUT.iterdir():
     if old.is_dir():shutil.rmtree(old)
     else:old.unlink()
-for name in ['style.css','app.mjs','dates.mjs']:
+for name in ['style.css','app.mjs','dates.mjs','privacy-controls.js']:
     shutil.copyfile(ROOT/'src'/name,OUT/name)
 e=html.escape
 def link(path):return BASE+'/'+path
@@ -51,14 +55,15 @@ def shell(path,title,desc,body,hi=False,kind='WebPage',index=True):
     if SITE_URL:schema['url']=SITE_URL+'/'+path
     if kind=='WebApplication':schema.update({'applicationCategory':'UtilitiesApplication','operatingSystem':'Any','isAccessibleForFree':True,'browserRequirements':'Requires JavaScript for calculations'})
     metadata=(f'<meta name="google-site-verification" content="{e(VERIFY)}">' if VERIFY else '')+(f'<meta name="google-adsense-account" content="{PUBLISHER}">' if PUBLISHER else '')
-    ads_script=f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={PUBLISHER}" crossorigin="anonymous"></script>' if ADS else ''
+    ads_script=f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={PUBLISHER}" crossorigin="anonymous"></script>' if AD_TAG and index else ''
+    consent_control=('<button type="button" data-privacy-settings hidden style="font:inherit;color:inherit;background:transparent;border:0;padding:0;text-decoration:underline;cursor:pointer">'+('गोपनीयता और कुकी सेटिंग' if hi else 'Privacy & cookie settings')+'</button><script src="'+link('privacy-controls.js')+'" defer></script>') if AD_TAG and index else ''
     footer_names=[('about/','हमारे बारे में' if hi else 'About'),('contact/','संपर्क' if hi else 'Contact'),('privacy/','गोपनीयता' if hi else 'Privacy'),('terms/','शर्तें व अस्वीकरण' if hi else 'Terms & disclaimer')]
     footerlinks=''.join(f'<a href="{link(langpath(p,hi))}">{n}</a>' for p,n in footer_names)
     content=f'''<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta name="robots" content="{robots}"><meta name="theme-color" content="#082c43">{canonical}<meta property="og:type" content="website"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:locale" content="{'hi_IN' if hi else 'en_IN'}">{f'<meta property="og:url" content="{e(SITE_URL+"/"+path)}">' if SITE_URL else ''}<meta name="twitter:card" content="summary"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}">{metadata}<link rel="icon" type="image/svg+xml" href="{favicon_url}"><link rel="stylesheet" href="{link('style.css')}"><script type="application/ld+json">{json.dumps(schema,ensure_ascii=False).replace('<','&lt;')}</script><script type="module" src="{link('app.mjs')}"></script>{ads_script}</head>
 <body><a class="skip" href="#main">{'मुख्य सामग्री पर जाएँ' if hi else 'Skip to content'}</a><header class="site-header"><nav class="nav wrap" aria-label="{'मुख्य नेविगेशन' if hi else 'Main navigation'}"><a class="brand" href="{home}" aria-label="RailDate home"><span class="brand-mark" aria-hidden="true">R</span><span>Rail<span>Date</span></span></a><div class="nav-links"><a class="active" href="{home}">{'कैलकुलेटर' if hi else 'Calculator'}</a><a class="guide-nav" href="{home}#guides">{'बुकिंग गाइड' if hi else 'Booking guides'}</a><a class="language" href="{link(alternate)}" lang="{'en' if hi else 'hi'}" hreflang="{'en' if hi else 'hi'}">{'English' if hi else 'हिन्दी'}</a></div></nav></header>
 <div class="today-strip"><div class="wrap today-content"><span>{'आज' if hi else 'Today'}: <strong id="today-date">{'लोड हो रहा है' if hi else 'Loading date'}</strong> &nbsp;·&nbsp; <span id="ist-clock" class="clock">IST</span></span><span>{'सामान्य विंडो में ट्रेन की शुरुआत' if hi else 'Standard window · train departures through'} <strong id="window-date">—</strong></span></div></div>
-<main id="main" class="wrap">{body}</main><footer class="footer"><div class="wrap"><div class="footer-top"><div class="footer-brand"><a class="brand" href="{home}">Rail<span>Date</span></a><p>{'यात्रा की तैयारी सही तारीख से। स्वतंत्र कैलकुलेटर; IRCTC या भारतीय रेल से संबद्ध नहीं।' if hi else 'A little planning. A smoother journey. An independent calculator, not affiliated with IRCTC or Indian Railways.'}</p></div><div class="footer-links">{footerlinks}<a href="https://www.irctc.co.in/nget/train-search" rel="external">{'आधिकारिक IRCTC ↗' if hi else 'Official IRCTC ↗'}</a></div></div><div class="footer-bottom"><span>© 2026 RailDate</span><span>{'सभी समय भारतीय मानक समय (IST) में।' if hi else 'All booking times are in Indian Standard Time (IST).'}</span></div></div></footer>{'<script src="'+link('ads.js')+'" defer></script>' if ADS else ''}</body></html>'''
+<main id="main" class="wrap">{body}</main><footer class="footer"><div class="wrap"><div class="footer-top"><div class="footer-brand"><a class="brand" href="{home}">Rail<span>Date</span></a><p>{'यात्रा की तैयारी सही तारीख से। स्वतंत्र कैलकुलेटर; IRCTC या भारतीय रेल से संबद्ध नहीं।' if hi else 'A little planning. A smoother journey. An independent calculator, not affiliated with IRCTC or Indian Railways.'}</p></div><div class="footer-links">{footerlinks}{consent_control}<a href="https://www.irctc.co.in/nget/train-search" rel="external">{'आधिकारिक IRCTC ↗' if hi else 'Official IRCTC ↗'}</a></div></div><div class="footer-bottom"><span>© 2026 RailDate</span><span>{'सभी समय भारतीय मानक समय (IST) में।' if hi else 'All booking times are in Indian Standard Time (IST).'}</span></div></div></footer>{'<script src="'+link('ads.js')+'" defer></script>' if ADS else ''}</body></html>'''
     destination=OUT/(path+'index.html') if index else OUT/path
     destination.parent.mkdir(parents=True,exist_ok=True);destination.write_text(content,encoding='utf-8')
     if index:pages.append(path)
@@ -81,7 +86,7 @@ def home(hi):
 
 for hi in [False,True]:
     home(hi)
-    for item in articles(hi,CONTACT,ADS,PUBLISHER):
+    for item in articles(hi,CONTACT,AD_TAG,PUBLISHER):
         path,title,desc,content=item
         related=''.join(f'<a href="{link(langpath(p,hi))}">{name}</a>' for p,name in [('advance-booking-guide/','60 दिन का नियम' if hi else 'The 60-day booking rule'),('tatkal-booking-guide/','तत्काल बुकिंग' if hi else 'Tatkal booking'),('train-origin-date-guide/','ट्रेन की शुरुआती तारीख' if hi else 'Your train’s starting date')])
         body=f'<div class="article-shell"><article class="article"><div class="breadcrumb"><a href="{link(langpath("",hi))}">{"कैलकुलेटर" if hi else "Calculator"}</a> / {e(title)}</div><div class="eyebrow">{"RAILDATE · जानकारी" if hi else "RAILDATE · THE PLANNING NOTES"}</div><h1>{e(title)}</h1><p class="lead">{e(desc)}</p><div class="article-meta">{"RailDate द्वारा · 13 सितंबर 2026 को समीक्षा" if hi else "By RailDate · Reviewed 13 September 2026"}</div>{content}{ad()}</article><aside class="aside"><h2>{"अपनी यात्रा की तैयारी करें" if hi else "Plan your journey"}</h2>{related}<a class="primary" href="{link(langpath("",hi))}">{"कैलकुलेटर खोलें" if hi else "Open calculator"} →</a></aside></div>'
@@ -94,4 +99,4 @@ if SITE_URL:
 if PUBLISHER:(OUT/'ads.txt').write_text(f'google.com, {PUBLISHER.removeprefix("ca-")}, DIRECT, f08c47fec0942fa0\n')
 if ADS:(OUT/'ads.js').write_text('document.querySelectorAll(".adsbygoogle").forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({});}catch{}});')
 (OUT/'.nojekyll').touch()
-print(f'Built {len(pages)} indexable routes and two 404 pages. Canonical origin: {SITE_URL or "unset (noindex preview)"}. Ads: {"enabled" if ADS else "off"}.')
+print(f'Built {len(pages)} indexable routes and two 404 pages. Canonical origin: {SITE_URL or "unset (noindex preview)"}. AdSense tag: {"installed (approval required)" if AD_TAG else "off"}.')

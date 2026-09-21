@@ -32,7 +32,9 @@ jobs:
           ADSENSE_PUBLISHER_ID: ${{ vars.ADSENSE_PUBLISHER_ID || 'ca-pub-1127445765148847' }}
           ADSENSE_SLOT_ID: ${{ vars.ADSENSE_SLOT_ID }}
           ADS_ENABLED: ${{ vars.ADS_ENABLED }}
-          ADS_PRIVACY_READY: ${{ vars.ADS_PRIVACY_READY }}
+          # Google CMP verified published for this host on 2026-09-21.
+          AUTO_ADS_ENABLED: ${{ vars.AUTO_ADS_ENABLED || 'true' }}
+          ADS_PRIVACY_READY: ${{ vars.ADS_PRIVACY_READY || 'true' }}
       - name: Check calculations and site
         run: npm test
       - uses: actions/upload-pages-artifact@v4
