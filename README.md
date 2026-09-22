@@ -52,7 +52,7 @@ On 21 September 2026 the authenticated AdSense dashboard confirmed:
 
 The Auto ads tag for `ca-pub-1127445765148847` is installed on the root homepage and generated indexable pages. AdSense loads the published Google CMP through this tag. Footer privacy controls use the documented googlefc callback queue to reopen the consent message when available. No fake slot ID, custom CMP or private login email is used. Auto ads needs no individual ad slot. The legacy manual-unit path still requires its original safeguards.
 
-The deployment defaults `AUTO_ADS_ENABLED` and `ADS_PRIVACY_READY` to true based on the observed published CMP. Installing the tag is allowed during review; it does not constitute approval or guarantee impressions. To disable this integration, set `AUTO_ADS_ENABLED=false` and leave `ADS_ENABLED` unset/false, rebuild, and remove the tag from the separate root homepage as well. Root authoritative ads.txt: https://yashwant-verma.github.io/ads.txt . Search Console verification is separate and is not claimed complete.
+The deployment defaults `AUTO_ADS_ENABLED` and `ADS_PRIVACY_READY` to true based on the observed published CMP. Installing the tag is allowed during review; it does not constitute approval or guarantee impressions. To disable this integration, set `AUTO_ADS_ENABLED=false` and leave `ADS_ENABLED` unset/false, rebuild, and remove the tag from the separate root homepage as well. Root authoritative ads.txt: https://yashwant-verma.github.io/ads.txt . Search Console status is recorded in the dated verification section below.
 
 Set these **repository variables** in Settings → Secrets and variables → Actions → Variables, then rebuild:
 
@@ -72,7 +72,7 @@ Official consent setup reference: https://support.google.com/adsense/answer/1691
 
 The free GitHub Pages address is used; no domain purchase is part of this project. AdSense must independently approve the submitted site `yashwant-verma.github.io`. The authoritative host-root `ads.txt` is maintained in `yashwant-verma/yashwant-verma.github.io`; the project-path copy alone is not sufficient for the host-root location. If the publisher ID changes, update both repositories. The root `robots.txt` advertises a sitemap index covering the homepage and this project's sitemap. Do not buy a domain or hosting plan unless the owner separately requests it.
 
-The site sends no analytics events. Add analytics only after deciding the product and updating the policy to match real behaviour. Never click your own ads, buy invalid traffic or promise guaranteed rankings. Publishing does not automatically verify Search Console or submit a sitemap.
+The site sends no analytics events. Add analytics only after deciding the product and updating the policy to match real behaviour. Never click your own ads, buy invalid traffic or promise guaranteed rankings. Search Console ownership and sitemap submission were completed separately; see dated status below.
 
 ## Content maintenance
 
@@ -84,3 +84,13 @@ Railway rules reviewed on 13 September 2026. Update the rule logic, guides and r
 - https://www.pib.gov.in/PressReleasePage.aspx?PRID=2135694
 
 Edit copy in `scripts/content.py` and `scripts/build.py`; appearance in `src/style.css`; behaviour in `src/app.mjs`; calendar arithmetic in `src/dates.mjs`. Rebuild after every change. Tests cover date boundaries, leap years, day-2 boarding, opening instants and exported event formatting. `scripts/check.py` checks generated internal links, anchors, languages, labels, metadata and JSON-LD. Check the live deployment after changing the repository name, base path or metadata.
+
+
+## Verified setup status — 22 September 2026
+
+- Root homepage and calculator Auto ads deployments succeeded. The exact publisher script is present on the live homepage and English/Hindi calculator pages.
+- Search Console URL-prefix property `https://yashwant-verma.github.io/` was verified using the HTML tag on the homepage. Keep that tag in place.
+- Submitted `https://yashwant-verma.github.io/sitemap.xml`, covering the homepage and 16 calculator/content URLs. The report initially shows Couldn't fetch. Google live URL inspection successfully fetched the sitemap, with Crawl allowed: Yes and Page fetch: Successful; the sitemap was resubmitted once. Processing success is not yet confirmed.
+- Google accepted a homepage indexing request into its priority crawl queue. Indexing and ranking are not guaranteed.
+- AdSense still shows Getting ready (review pending) and ads.txt Not found, while the root ads.txt is publicly available with HTTP 200 and the correct publisher record. Do not delete and recreate the AdSense site merely to refresh this status.
+- No paid domain, hosting plan, runner or API was purchased. No approval or earnings are claimed.
